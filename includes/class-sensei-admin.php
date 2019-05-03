@@ -80,6 +80,9 @@ class Sensei_Admin {
 		// remove a course from course order when trashed
 		add_action( 'transition_post_status', array( $this, 'remove_trashed_course_from_course_order' ) );
 
+		// Add AJAX endpoint for event logging.
+		add_action( 'wp_ajax_sensei_log_event', array( $this, 'log_event' ) );
+
 		Sensei_Extensions::instance()->init();
 
 	} // End __construct()
@@ -332,6 +335,10 @@ class Sensei_Admin {
 		}
 
 		wp_enqueue_script( 'sensei-message-menu-fix', Sensei()->plugin_url . 'assets/js/admin/message-menu-fix.js', array( 'jquery' ), Sensei()->version, true );
+
+		// Event logging.
+		wp_enqueue_script( 'sensei-event-logging', Sensei()->plugin_url . 'assets/js/admin/event_logging' . $suffix . '.js', array( 'jquery' ), Sensei()->version, true );
+		wp_localize_script( 'sensei-event-logging', 'sensei_event_logging', [ 'enabled' => Sensei_Usage_Tracking::get_instance()->get_tracking_enabled() ] );
 	}
 
 
@@ -1773,6 +1780,22 @@ class Sensei_Admin {
 			</div>
 			<?php
 		}
+	}
+
+	/**
+	 * Attempt to log a Sensei event.
+	 *
+	 *
+	 */
+	function log_event() {
+		if ( ! isset( $_REQUEST['event_name'] ) ) {
+			wp_die();
+		}
+
+		$event_name = $_REQUEST['event_name'];
+		$properties = isset( $_REQUEST['properties'] ) ? $_REQUEST['properties'] : [];
+
+		sensei_log_event( $event_name, $properties );
 	}
 
 } // End Class
