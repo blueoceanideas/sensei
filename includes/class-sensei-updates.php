@@ -1070,7 +1070,6 @@ class Sensei_Updates {
 
 			if ( ! $user_exists ) {
 				wp_delete_comment( intval( $activity->comment_ID ), true );
-				wp_cache_flush();
 			}
 		}
 
