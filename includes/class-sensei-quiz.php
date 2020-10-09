@@ -424,21 +424,19 @@ class Sensei_Quiz {
 		foreach ( $unprepared_answers as $question_id => $answer ) {
 
 			// get the current questions question type
-			$question_type = Sensei()->question->get_question_type( $question_id );
+			$question_type = Sensei()->question->get_question_type($question_id);
 
 			// Sanitise answer
-			if ( 0 == get_magic_quotes_gpc() ) {
-				$answer = wp_unslash( $answer );
-			}
+			$answer = wp_unslash($answer);
 
 			// compress the answer for saving
-			if ( 'multi-line' == $question_type ) {
-				$answer = wp_kses( $answer, wp_kses_allowed_html( 'post' ) );
-			} elseif ( 'file-upload' == $question_type ) {
+			if ('multi-line' == $question_type) {
+				$answer = wp_kses($answer, wp_kses_allowed_html('post'));
+			} else if ('file-upload' == $question_type) {
 				$file_key = 'file_upload_' . $question_id;
-				if ( isset( $files[ $file_key ] ) ) {
-						$attachment_id = Sensei_Utils::upload_file( $files[ $file_key ] );
-					if ( $attachment_id ) {
+				if (isset($files[$file_key])) {
+					$attachment_id = Sensei_Utils::upload_file($files[$file_key]);
+					if ($attachment_id) {
 						$answer = $attachment_id;
 					}
 				}
