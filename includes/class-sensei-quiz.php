@@ -427,9 +427,7 @@ class Sensei_Quiz {
 			$question_type = Sensei()->question->get_question_type( $question_id );
 
 			// Sanitise answer
-			if ( 0 == get_magic_quotes_gpc() ) {
-				$answer = wp_unslash( $answer );
-			}
+			$answer = wp_unslash( $answer );
 
 			// compress the answer for saving
 			if ( 'multi-line' == $question_type ) {
