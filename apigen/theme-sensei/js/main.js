@@ -1,4 +1,4 @@
-$(window).load(function() {
+$(window).on('load', function () {
 	var $document = $(document);
 	var $left = $('#left');
 	var $right = $('#right');
@@ -16,8 +16,8 @@ $(window).load(function() {
 		$(this)
 			.toggleClass('collapsed')
 			.parent()
-				.next('ul')
-					.toggleClass('collapsed');
+			.next('ul')
+			.toggleClass('collapsed');
 	}).click();
 
 	$active = $('ul li.active', $groups);
@@ -48,10 +48,10 @@ $(window).load(function() {
 			max: 20,
 			noRecord: '',
 			highlight: function(value, term) {
-				var term = term.toUpperCase().replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1").replace(/[A-Z0-9]/g, function(m, offset) {
+				var term = term.toUpperCase().replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, '\\$1').replace(/[A-Z0-9]/g, function(m, offset) {
 					return offset === 0 ? '(?:' + m + '|^' + m.toLowerCase() + ')' : '(?:(?:[^<>]|<[^<>]*>)*' + m + '|' + m.toLowerCase() + ')';
 				});
-				return value.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + term + ")(?![^<>]*>)(?![^&;]+;)"), "<strong>$1</strong>");
+				return value.replace(new RegExp('(?![^&;]+;)(?!<[^<>]*)(' + term + ')(?![^<>]*>)(?![^&;]+;)'), '<strong>$1</strong>');
 			},
 			formatItem: function(data) {
 				return data.length > 1 ? data[1].replace(/^(.+\\)(.+)$/, '<span><small>$1</small>$2</span>') : data[0];
@@ -87,13 +87,13 @@ $(window).load(function() {
 			// Workaround for Opera bug
 			$(this).closest('form').attr('action', location.join('/'));
 		}).closest('form')
-			.submit(function() {
-				var query = $search.val();
-				if ('' === query) {
-					return false;
-				}
-				return !autocompleteFound && '' !== $('#search input[name=cx]').val();
-			});
+		.submit(function() {
+			var query = $search.val();
+			if ('' === query) {
+				return false;
+			}
+			return !autocompleteFound && '' !== $('#search input[name=cx]').val();
+		});
 
 	// Save natural order
 	$('table.summary tr[data-order]', $content).each(function(index) {
@@ -106,7 +106,7 @@ $(window).load(function() {
 	// Switch between natural and alphabetical order
 	var $caption = $('table.summary', $content)
 		.filter(':has(tr[data-order])')
-			.find('caption');
+		.find('caption');
 	$caption
 		.click(function() {
 			var $this = $(this);
@@ -117,9 +117,9 @@ $(window).load(function() {
 			var attr = 'alphabetical' === order ? 'data-order' : 'data-order-natural';
 			$this
 				.closest('table')
-					.find('tr').sortElements(function(a, b) {
-						return $(a).attr(attr) > $(b).attr(attr) ? 1 : -1;
-					});
+				.find('tr').sortElements(function(a, b) {
+					return $(a).attr(attr) > $(b).attr(attr) ? 1 : -1;
+				});
 			return false;
 		})
 		.addClass('switchable')
@@ -158,31 +158,31 @@ $(window).load(function() {
 			.toggleClass('small', width <= 650);
 	}
 	$splitter.mousedown(function() {
-			$splitter.addClass('active');
+		$splitter.addClass('active');
 
-			$document.mousemove(function(event) {
-				if (event.pageX >= 230 && $document.width() - event.pageX >= 600 + splitterWidth) {
-					setSplitterPosition(event.pageX);
-					setContentWidth();
-				}
+		$document.mousemove(function(event) {
+			if (event.pageX >= 230 && $document.width() - event.pageX >= 600 + splitterWidth) {
+				setSplitterPosition(event.pageX);
+				setContentWidth();
+			}
+		});
+
+		$()
+			.add($splitter)
+			.add($document)
+			.mouseup(function() {
+				$splitter
+					.removeClass('active')
+					.unbind('mouseup');
+				$document
+					.unbind('mousemove')
+					.unbind('mouseup');
+
+				$.cookie('splitter', splitterPosition, {expires: 365});
 			});
 
-			$()
-				.add($splitter)
-				.add($document)
-					.mouseup(function() {
-						$splitter
-							.removeClass('active')
-							.unbind('mouseup');
-						$document
-							.unbind('mousemove')
-							.unbind('mouseup');
-
-						$.cookie('splitter', splitterPosition, {expires: 365});
-					});
-
-			return false;
-		});
+		return false;
+	});
 	$splitter.dblclick(function() {
 		if (splitterPosition) {
 			splitterPositionBackup = $left.width();
