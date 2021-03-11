@@ -156,7 +156,7 @@ jQuery(document).ready( function() {
 	 */
 	jQuery.fn.updateQuestionCount = function( increment, operator ) {
 		// Get current value
-		var currentValue = parseInt( jQuery( '#question_counter' ).attr( 'value' ) );
+		var currentValue = parseInt( jQuery( '#question_counter' ).val() );
 		var newValue = currentValue;
 		increment = parseInt( increment );
 		// Increment or Decrement
@@ -189,7 +189,7 @@ jQuery(document).ready( function() {
 		var quiz_grade_type = jQuery( 'input#quiz_grade_type' ).is( ':checked' ) ? 'auto' : 'manual';
 
 		var dataToPost = 'quiz_grade_type' + '=' + quiz_grade_type;
-		dataToPost += '&quiz_id' + '=' + jQuery( '#quiz_id' ).attr( 'value' );
+		dataToPost += '&quiz_id' + '=' + jQuery( '#quiz_id' ).val();
 
 		jQuery.post(
 			ajaxurl,
@@ -212,7 +212,7 @@ jQuery(document).ready( function() {
 	jQuery.fn.saveQuestionOrder = function( question_order ) {
 
 		var dataToPost = 'question_order' + '=' + question_order;
-		dataToPost += '&quiz_id' + '=' + jQuery( '#quiz_id' ).attr( 'value' );
+		dataToPost += '&quiz_id' + '=' + jQuery( '#quiz_id' ).val();
 
 		jQuery.post(
 			ajaxurl,
@@ -237,7 +237,7 @@ jQuery(document).ready( function() {
 		var random_question_order = jQuery( 'input#random_question_order' ).is( ':checked' ) ? 'yes' : 'no';
 
 		var dataToPost = 'random_question_order' + '=' + random_question_order;
-		dataToPost += '&quiz_id' + '=' + jQuery( '#quiz_id' ).attr( 'value' );
+		dataToPost += '&quiz_id' + '=' + jQuery( '#quiz_id' ).val();
 
 		jQuery.post(
 			ajaxurl,
@@ -615,8 +615,8 @@ jQuery(document).ready( function() {
 			dataToPost += 'course_prerequisite' + '=' + jQuery( '#course-prerequisite-options' ).val();
 			dataToPost += '&course_woocommerce_product' + '=' + jQuery( '#course-woocommerce-product-options' ).val();
 			dataToPost += '&course_category' + '=' + jQuery( '#course-category-options' ).val();
-			dataToPost += '&course_title' + '=' + encodeURIComponent( jQuery( '#course-title' ).attr( 'value' ) );
-			dataToPost += '&course_content' + '=' + encodeURIComponent( jQuery( '#course-content' ).attr( 'value' ) );
+			dataToPost += '&course_title' + '=' + encodeURIComponent( jQuery( '#course-title' ).val() );
+			dataToPost += '&course_content' + '=' + encodeURIComponent( jQuery( '#course-content' ).val() );
 			dataToPost += '&action=add';
 			// Perform the AJAX call.
 			jQuery.post(
@@ -632,7 +632,7 @@ jQuery(document).ready( function() {
 					if ( 0 < response ) {
 						jQuery( '#lesson-course-actions' ).show();
 						jQuery( '#lesson-course-details' ).addClass( 'hidden' );
-						jQuery( '#lesson-course-options' ).append(jQuery( '<option></option>' ).attr( 'value' , response ).text(  jQuery( '#course-title' ).attr( 'value' ) ) );
+						jQuery( '#lesson-course-options' ).append(jQuery( '<option></option>' ).attr( 'value' , response ).text(  jQuery( '#course-title' ).val() ) );
 						jQuery( '#lesson-course-options' ).val( response).trigger('change');
 					} else {
 						// TODO - course creation fail message
@@ -729,6 +729,7 @@ jQuery(document).ready( function() {
 	 * @access public
 	 */
 	jQuery( '#add-new-question' ).on( 'click', 'a.add_question_save', function() {
+		console.log('add new question');
 		var dataToPost = '';
 		var questionGrade = '';
 		var questionType = 'multiple-choice';
@@ -738,7 +739,7 @@ jQuery(document).ready( function() {
 		var validInput = jQuery.fn.validateQuestionInput( 'add', jQuery(this) );
 		if ( validInput ) {
 			// Setup data to post
-			dataToPost += 'quiz_id' + '=' + jQuery( '#quiz_id' ).attr( 'value' );
+			dataToPost += 'quiz_id' + '=' + jQuery( '#quiz_id' ).val();
 			dataToPost += '&action=add';
 			if ( jQuery( '#add-question-type-options' ).val() != '' ) {
 				questionType = jQuery( '#add-question-type-options' ).val();
@@ -773,7 +774,7 @@ jQuery(document).ready( function() {
 			// Handle Required Fields
 			jQuery( '#add-new-question' ).find( 'div.question_required_fields' ).find( 'input' ).each( function() {
 				if ( jQuery( this ).attr( 'type' ) != 'radio' ) {
-					dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( this ).attr( 'value' ) );
+					dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( this ).val() );
 				} // End If Statement
 			});
 
@@ -788,12 +789,12 @@ jQuery(document).ready( function() {
 				if ( jQuery( this ).attr( 'type' ) == 'radio' ) {
 					// Only get the selected radio button
 					if ( radioCount == 0 ) {
-						radioValue = jQuery( 'input[name=' + jQuery( this ).attr( 'name' ) + ']:checked' ).attr( 'value' );
+						radioValue = jQuery( 'input[name=' + jQuery( this ).attr( 'name' ) + ']:checked' ).val();
 						dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( radioValue );
 						radioCount++;
 					} // End If Statement
 				} else {
-					dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( this ).attr( 'value' ) );
+					dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( this ).val() );
 				} // End If Statement
 			});
 			// Handle Question Textarea Fields
@@ -808,17 +809,17 @@ jQuery(document).ready( function() {
 			questionGrade = jQuery( '#add-question-grade' ).val();
 			dataToPost += '&' + 'question_grade' + '=' + questionGrade;
 
-			var questionCount = parseInt( jQuery( '#question_counter' ).attr( 'value' ) );
+			var questionCount = parseInt( jQuery( '#question_counter' ).val() );
 			dataToPost += '&' + 'question_count' + '=' + questionCount;
 
-			var answer_order = jQuery( '#add-new-question' ).find( '.answer_order' ).attr( 'value' );
+			var answer_order = jQuery( '#add-new-question' ).find( '.answer_order' ).val();
 			dataToPost += '&' + 'answer_order' + '=' + answer_order;
 
-			var question_media = jQuery( '#add-new-question' ).find( '.question_media' ).attr( 'value' );
+			var question_media = jQuery( '#add-new-question' ).find( '.question_media' ).val();
 			dataToPost += '&' + 'question_media' + '=' + question_media;
 
 			if ( '' != jQuery( 'div#add-new-question' ).find( 'div.' + divFieldsClass ).find( '.answer_feedback' ).exists() ) {
-				var answer_feedback = jQuery( '#add-new-question' ).find( 'div.' + divFieldsClass ).find( '.answer_feedback' ).attr( 'value' );
+				var answer_feedback = jQuery( '#add-new-question' ).find( 'div.' + divFieldsClass ).find( '.answer_feedback' ).val();
 				dataToPost += '&' + 'answer_feedback' + '=' + encodeURIComponent( answer_feedback );
 			}
 
@@ -869,7 +870,7 @@ jQuery(document).ready( function() {
 		var questionCategory = '';
 		var questionNumber = 0;
 
-		dataToPost += 'quiz_id' + '=' + jQuery( '#quiz_id' ).attr( 'value' );
+		dataToPost += 'quiz_id' + '=' + jQuery( '#quiz_id' ).val();
 
 		if ( jQuery( '#add-multiple-question-count' ).val() != '' ) {
 			questionNumber = parseInt( jQuery( '#add-multiple-question-count' ).val() );
@@ -890,7 +891,7 @@ jQuery(document).ready( function() {
 		} // End If Statement
 		dataToPost += '&' + 'question_category' + '=' + questionCategory;
 
-		var questionCount = parseInt( jQuery( '#question_counter' ).attr( 'value' ) );
+		var questionCount = parseInt( jQuery( '#question_counter' ).val() );
 		dataToPost += '&' + 'question_count' + '=' + questionCount;
 
 		if( questionCategory && questionNumber ) {
@@ -942,10 +943,10 @@ jQuery(document).ready( function() {
 		var validInput = jQuery.fn.validateQuestionInput( 'edit', jQuery(this) );
 		if ( validInput ) {
 			// Setup the data to post
-			dataToPost += 'quiz_id' + '=' + jQuery( '#quiz_id' ).attr( 'value' );
+			dataToPost += 'quiz_id' + '=' + jQuery( '#quiz_id' ).val();
 			dataToPost += '&action=save';
 			jQuery( this ).closest( 'td' ).children( 'input' ).each( function() {
-				dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( this ).attr( 'value' ) );
+				dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( this ).val() );
 			});
 			tableRowId = jQuery( this ).closest('td').find('span.question_original_counter').text();
 			if ( jQuery( this ).closest('td').find( 'input.question_type' ).val() != '' ) {
@@ -978,7 +979,7 @@ jQuery(document).ready( function() {
 			// Handle Required Fields
 			jQuery( this ).closest('td').find( 'div.question_required_fields' ).find( 'input' ).each( function() {
 				if ( jQuery( this ).attr( 'type' ) != 'radio' ) {
-					dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( this ).attr( 'value' ) );
+					dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( this ).val() );
 				} // End If Statement
 			});
 
@@ -993,11 +994,11 @@ jQuery(document).ready( function() {
 				if ( jQuery( this ).attr( 'type' ) == 'radio' ) {
 					// Only get the selected radio button
 					if ( radioCount == 0 ) {
-						dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( 'input[name=' + jQuery( this ).attr( 'name' ) + ']:checked' ).attr( 'value' ) );
+						dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( 'input[name=' + jQuery( this ).attr( 'name' ) + ']:checked' ).val() );
 						radioCount++;
 					} // End If Statement
 				} else {
-					dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( this ).attr( 'value' ) );
+					dataToPost += '&' + jQuery( this ).attr( 'name' ) + '=' + encodeURIComponent( jQuery( this ).val() );
 				} // End If Statement
 			});
 
@@ -1015,17 +1016,17 @@ jQuery(document).ready( function() {
 			questionGrade = jQuery( this ).closest('td').find( 'input.question_grade' ).val();
 			dataToPost += '&' + 'question_grade' + '=' + questionGrade;
 
-			var questionCount = parseInt( jQuery( '#question_counter' ).attr( 'value' ) );
+			var questionCount = parseInt( jQuery( '#question_counter' ).val() );
 			dataToPost += '&' + 'question_count' + '=' + questionCount;
 
-			var answer_order = jQuery( this ).closest('td').find( '.answer_order' ).attr( 'value' );
+			var answer_order = jQuery( this ).closest('td').find( '.answer_order' ).val();
 			dataToPost += '&' + 'answer_order' + '=' + answer_order;
 
-			var question_media = jQuery( this ).closest('td').find( '.question_media' ).attr( 'value' );
+			var question_media = jQuery( this ).closest('td').find( '.question_media' ).val();
 			dataToPost += '&' + 'question_media' + '=' + question_media;
 
 			if ( '' != jQuery( this ).closest('td').find( '.answer_feedback' ).exists() ) {
-				var answer_feedback = jQuery( this ).closest('td').find( '.answer_feedback' ).attr( 'value' );
+				var answer_feedback = jQuery( this ).closest('td').find( '.answer_feedback' ).val();
 				dataToPost += '&' + 'answer_feedback' + '=' + encodeURIComponent( answer_feedback );
 			}
 
@@ -1083,11 +1084,11 @@ jQuery(document).ready( function() {
 			dataToPost += '&action=delete';
 			jQuery( this ).closest('tr').next('tr').find('td').find( 'input' ).each( function() {
 				if ( jQuery( this ).attr( 'name' ) == 'question_id' ) {
-					dataToPost += '&question_id' + '=' + jQuery( this ).attr( 'value' );
+					dataToPost += '&question_id' + '=' + jQuery( this ).val();
 				} // End If Statement
 			});
 
-			dataToPost += '&quiz_id' + '=' + jQuery( '#quiz_id' ).attr( 'value' );
+			dataToPost += '&quiz_id' + '=' + jQuery( '#quiz_id' ).val();
 
 			tableRowId = jQuery( this ).closest('tr').find('td.question-number span.number').text();
 			var row_parent = jQuery( this ).closest( 'tbody' );
@@ -1144,7 +1145,7 @@ jQuery(document).ready( function() {
 		if ( confirmDelete ) {
 
 			dataToPost += 'question_id' + '=' + jQuery( this ).attr( 'rel' );
-			dataToPost += '&quiz_id' + '=' + jQuery( '#quiz_id' ).attr( 'value' );
+			dataToPost += '&quiz_id' + '=' + jQuery( '#quiz_id' ).val();
 
 			var tableRowId = jQuery( this ).closest('tr').find('td.question-number span.number').text();
 			var total_number = jQuery( this ).closest('tr').find('td.question-number span.total-number').text();
@@ -1206,9 +1207,9 @@ jQuery(document).ready( function() {
 		if( questions ) {
 
 			dataToPost = 'questions=' + questions;
-			dataToPost += '&quiz_id=' + jQuery( '#quiz_id' ).attr( 'value' );
+			dataToPost += '&quiz_id=' + jQuery( '#quiz_id' ).val();
 
-			var questionCount = parseInt( jQuery( '#question_counter' ).attr( 'value' ) );
+			var questionCount = parseInt( jQuery( '#question_counter' ).val() );
 			dataToPost += '&question_count=' + questionCount;
 
 			// Perform the AJAX call.
