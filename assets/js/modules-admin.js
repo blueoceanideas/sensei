@@ -52,7 +52,7 @@ jQuery( document ).ready( function () {
 
 		});
 
-		jQuery( 'input[name="module-order"]' ).attr( 'value', orderString );
+		jQuery( 'input[name="module-order"]' ).val( orderString );
 	});
 
 

@@ -40,15 +40,27 @@ jQuery(document).ready( function() {
 		// Validate Actions
 		if ( 'add' == action ) {
 			// Check for empty questions
-			if ( jQuery( '#add_question' ).val().replace(/^\s+|\s+$/g, '').length != 0 ) {
+			if (
+				jQuery( '#add_question' )
+					.val()
+					.replace(/^\s+|\s+$/g, '').length != 0
+			) {
 				return true;
 			} else {
 				return false;
 			}
 		} else if ( 'edit' == action ) {
 			// Check for empty questions
-			var tableRowId = jqueryObject.closest('tr').prev('tr').find('td:first').text();
-			if ( jQuery( '#question_' + tableRowId ).val().replace(/^\s+|\s+$/g, '').length != 0 ) {
+			var tableRowId = jqueryObject
+				.closest('tr')
+				.prev('tr')
+				.find('td:first')
+				.text();
+			if (
+				jQuery( '#question_' + tableRowId )
+					.val()
+					.replace(/^\s+|\s+$/g, '').length != 0
+			) {
 				return true;
 			} else {
 				return false;
